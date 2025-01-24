@@ -1,0 +1,19 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h2 class="list-group-item-heading">{{ contact.name }}</h2>
+    <span>
+      <img
+        [src]="contact.imageUrl"
+        alt="{{ contact.name }}"
+        class="img-responsive"
+        style="min-height: 100px"
+      />
+      <button class="btn btn-primary" type="button">Edit</button>
+      <button class="btn btn-danger" type="button">Delete</button>
+    </span>
+  </div>
+  <div class="panel-body">
+    <p><strong>Email:</strong>{{ contact.email }}</p>
+    <p><strong>Phone Number:</strong>{{ contact.phone }}</p>
+  </div>
+</div>
