@@ -8,9 +8,11 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 export class DocumentService implements OnInit {
   documents: Document[];
   @Output() documentSelectedEvent = new EventEmitter<Document>();
+  @Output() documentChangedEvent = new EventEmitter<Document[]>();
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
+    console.log(this.documents);
   }
 
   ngOnInit(): void {}
@@ -19,12 +21,20 @@ export class DocumentService implements OnInit {
     return this.documents.slice();
   }
 
-  getDocumentId(id: string): Document {
-    for (const document of this.documents) {
-      if (document.id === id) {
-        return document;
-      }
+  getDocumentId(id: string): Document | null {
+    return this.documents.find((document) => document.id === id) || null;
+  }
+
+  deleteDocument(document: Document) {
+    console.log(document);
+    if (!document) {
+      return;
     }
-    return null;
+    const pos = this.documents.indexOf(document);
+    if (pos < 0) {
+      return;
+    }
+    this.documents.splice(pos, 1);
+    this.documentChangedEvent.emit(this.documents.slice());
   }
 }
