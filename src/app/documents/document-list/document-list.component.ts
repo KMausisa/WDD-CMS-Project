@@ -20,7 +20,6 @@ export class DocumentListComponent implements OnInit {
   }
 
   onSelectedDocument(document: Document) {
-    console.log(document);
     this.documentService.documentSelectedEvent.emit(document);
   }
 }
