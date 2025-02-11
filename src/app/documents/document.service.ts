@@ -1,18 +1,19 @@
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
 import { Document } from './document.model';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentService {
+export class DocumentService implements OnInit {
   documents: Document[];
   @Output() documentSelectedEvent = new EventEmitter<Document>();
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
-    console.log(this.documents);
   }
+
+  ngOnInit(): void {}
 
   getDocuments(): Document[] {
     return this.documents.slice();
