@@ -11,13 +11,14 @@ import { Document } from '../document.model';
 })
 export class DocumentItemComponent implements OnInit {
   @Input() document: Document;
-  @Output() documentSelected = new EventEmitter<void>();
+  @Input() index: number;
+  @Output() documentSelected = new EventEmitter<Document>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
   onSelected() {
-    this.documentSelected.emit();
+    this.documentSelected.emit(this.document);
   }
 }
