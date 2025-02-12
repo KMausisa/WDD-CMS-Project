@@ -12,7 +12,6 @@ export class DocumentService implements OnInit {
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
-    console.log(this.documents);
   }
 
   ngOnInit(): void {}
@@ -26,7 +25,6 @@ export class DocumentService implements OnInit {
   }
 
   deleteDocument(document: Document) {
-    console.log(document);
     if (!document) {
       return;
     }
