@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Document } from '../document.model';
 import { DocumentService } from '../document.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { NgForm } from '@angular/forms';
   styleUrl: './document-edit.component.css',
 })
 export class DocumentEditComponent implements OnInit {
+  @ViewChild('f', { static: false }) slForm: NgForm;
   originalDocument: Document;
   document: Document;
   editMode: boolean = false;
@@ -51,11 +52,12 @@ export class DocumentEditComponent implements OnInit {
       this.documentService.updateDocument(this.originalDocument, newDocument);
     } else {
       this.documentService.addDocument(newDocument);
-      this.router.navigate(['/documents']);
+      this.onCancel();
     }
   }
 
   onCancel() {
+    this.slForm.reset();
     this.router.navigate(['/documents']);
   }
 }
