@@ -5,6 +5,7 @@ import {
   Notification,
   Observable,
   OuterSubscriber,
+  ReplaySubject,
   SimpleInnerSubscriber,
   SimpleOuterSubscriber,
   Subject,
@@ -15,6 +16,7 @@ import {
   __spreadProps,
   __spreadValues,
   asap,
+  async,
   concat,
   empty,
   filter,
@@ -27,7 +29,8 @@ import {
   map,
   mergeMap,
   noop,
-  subscribeToResult
+  subscribeToResult,
+  timer
 } from "./chunk-H4JBMRPK.js";
 
 // node_modules/@angular/core/fesm2022/primitives/signals.mjs
@@ -1613,6 +1616,11 @@ function clearAppScopedEarlyEventContract(appId, dataContainer = window) {
 }
 
 // node_modules/rxjs/_esm5/internal/operators/audit.js
+function audit(durationSelector) {
+  return function auditOperatorFunction(source) {
+    return source.lift(new AuditOperator(durationSelector));
+  };
+}
 var AuditOperator = function() {
   function AuditOperator2(durationSelector) {
     this.durationSelector = durationSelector;
@@ -1670,6 +1678,16 @@ var AuditSubscriber = function(_super) {
   };
   return AuditSubscriber2;
 }(SimpleOuterSubscriber);
+
+// node_modules/rxjs/_esm5/internal/operators/auditTime.js
+function auditTime(duration, scheduler) {
+  if (scheduler === void 0) {
+    scheduler = async;
+  }
+  return audit(function() {
+    return timer(duration, scheduler);
+  });
+}
 
 // node_modules/rxjs/_esm5/internal/operators/buffer.js
 var BufferOperator = function() {
@@ -2258,6 +2276,14 @@ var DebounceSubscriber = function(_super) {
 }(SimpleOuterSubscriber);
 
 // node_modules/rxjs/_esm5/internal/operators/debounceTime.js
+function debounceTime(dueTime, scheduler) {
+  if (scheduler === void 0) {
+    scheduler = async;
+  }
+  return function(source) {
+    return source.lift(new DebounceTimeOperator(dueTime, scheduler));
+  };
+}
 var DebounceTimeOperator = function() {
   function DebounceTimeOperator2(dueTime, scheduler) {
     this.dueTime = dueTime;
@@ -2626,6 +2652,11 @@ var DistinctSubscriber = function(_super) {
 }(SimpleOuterSubscriber);
 
 // node_modules/rxjs/_esm5/internal/operators/distinctUntilChanged.js
+function distinctUntilChanged(compare, keySelector) {
+  return function(source) {
+    return source.lift(new DistinctUntilChangedOperator(compare, keySelector));
+  };
+}
 var DistinctUntilChangedOperator = function() {
   function DistinctUntilChangedOperator2(compare, keySelector) {
     this.compare = compare;
@@ -3482,6 +3513,11 @@ var OnErrorResumeNextSubscriber = function(_super) {
 }(SimpleOuterSubscriber);
 
 // node_modules/rxjs/_esm5/internal/operators/pairwise.js
+function pairwise() {
+  return function(source) {
+    return source.lift(new PairwiseOperator());
+  };
+}
 var PairwiseOperator = function() {
   function PairwiseOperator2() {
   }
@@ -3898,6 +3934,70 @@ var SequenceEqualCompareToSubscriber = function(_super) {
   return SequenceEqualCompareToSubscriber2;
 }(Subscriber);
 
+// node_modules/rxjs/_esm5/internal/operators/shareReplay.js
+function shareReplay(configOrBufferSize, windowTime2, scheduler) {
+  var config;
+  if (configOrBufferSize && typeof configOrBufferSize === "object") {
+    config = configOrBufferSize;
+  } else {
+    config = {
+      bufferSize: configOrBufferSize,
+      windowTime: windowTime2,
+      refCount: false,
+      scheduler
+    };
+  }
+  return function(source) {
+    return source.lift(shareReplayOperator(config));
+  };
+}
+function shareReplayOperator(_a) {
+  var _b = _a.bufferSize, bufferSize = _b === void 0 ? Number.POSITIVE_INFINITY : _b, _c = _a.windowTime, windowTime2 = _c === void 0 ? Number.POSITIVE_INFINITY : _c, useRefCount = _a.refCount, scheduler = _a.scheduler;
+  var subject;
+  var refCount2 = 0;
+  var subscription;
+  var hasError = false;
+  var isComplete = false;
+  return function shareReplayOperation(source) {
+    refCount2++;
+    var innerSub;
+    if (!subject || hasError) {
+      hasError = false;
+      subject = new ReplaySubject(bufferSize, windowTime2, scheduler);
+      innerSub = subject.subscribe(this);
+      subscription = source.subscribe({
+        next: function(value) {
+          subject.next(value);
+        },
+        error: function(err) {
+          hasError = true;
+          subject.error(err);
+        },
+        complete: function() {
+          isComplete = true;
+          subscription = void 0;
+          subject.complete();
+        }
+      });
+      if (isComplete) {
+        subscription = void 0;
+      }
+    } else {
+      innerSub = subject.subscribe(this);
+    }
+    this.add(function() {
+      refCount2--;
+      innerSub.unsubscribe();
+      innerSub = void 0;
+      if (subscription && !isComplete && useRefCount && refCount2 === 0) {
+        subscription.unsubscribe();
+        subscription = void 0;
+        subject = void 0;
+      }
+    });
+  };
+}
+
 // node_modules/rxjs/_esm5/internal/operators/single.js
 var SingleOperator = function() {
   function SingleOperator2(predicate, source) {
@@ -3957,6 +4057,11 @@ var SingleSubscriber = function(_super) {
 }(Subscriber);
 
 // node_modules/rxjs/_esm5/internal/operators/skip.js
+function skip(count2) {
+  return function(source) {
+    return source.lift(new SkipOperator(count2));
+  };
+}
 var SkipOperator = function() {
   function SkipOperator2(total) {
     this.total = total;
@@ -29706,15 +29811,21 @@ if (typeof ngDevMode !== "undefined" && ngDevMode) {
 
 export {
   SIGNAL,
+  auditTime,
   catchError,
   concatMap,
+  debounceTime,
   defaultIfEmpty,
+  distinctUntilChanged,
   take,
   finalize,
   first,
   takeLast,
   last,
   scan,
+  pairwise,
+  shareReplay,
+  skip,
   startWith,
   switchMap,
   takeUntil,
@@ -30272,4 +30383,4 @@ export {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
-//# sourceMappingURL=chunk-MOKOMEF5.js.map
+//# sourceMappingURL=chunk-HAYGR63U.js.map

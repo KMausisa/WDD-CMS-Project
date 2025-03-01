@@ -26,17 +26,17 @@
             id="email"
             name="email"
             class="form-control required"
-            pattern="“[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$”"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
             size="120"
             max="255"
             [ngModel]="contact?.email"
             #email="ngModel"
             required
           />
+          <div *ngIf="!email.valid && email.touched">
+            Enter a valid Email address
+          </div>
         </div>
-      </div>
-      <div *ngIf="!email.valid && email.touched">
-        Enter a valid Email address
       </div>
       <div class="row">
         <div class="col-sm-12 form-group">
@@ -84,7 +84,7 @@
         <div class="form-group">
           <label for="groupList">Group Contacts:</label>
 
-          <div class="row" id="groupList" style="min-height: 3rem">
+          <!-- <div class="row" id="groupList" style="min-height: 3rem">
             <div *ngFor="let contact of groupContacts; let i = index">
               <div>
                 <cms-contact-item
@@ -102,7 +102,7 @@
             <span class="dragMsg" *ngIf="groupContacts?.length < 1"
               >Drag contacts in group here</span
             >
-          </div>
+          </div> -->
         </div>
       </div>
 

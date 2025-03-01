@@ -1,55 +1,61 @@
 {
-  "hash": "a5220cee",
-  "configHash": "6075f63b",
-  "lockfileHash": "a55dce26",
-  "browserHash": "933f0ec1",
+  "hash": "a3daa978",
+  "configHash": "925c11f6",
+  "lockfileHash": "364b6a74",
+  "browserHash": "fb1ca6c1",
   "optimized": {
+    "@angular/cdk/drag-drop": {
+      "src": "../../../../../../node_modules/@angular/cdk/fesm2022/drag-drop.mjs",
+      "file": "@angular_cdk_drag-drop.js",
+      "fileHash": "9022f4ed",
+      "needsInterop": false
+    },
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "dbfb2b4e",
+      "fileHash": "237b5376",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "ab90f479",
+      "fileHash": "707e387e",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "93dedd92",
+      "fileHash": "d86f00da",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "0d337978",
+      "fileHash": "37ab5f41",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "6e140ab6",
+      "fileHash": "2d495ca2",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/_esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "23b23959",
+      "fileHash": "13c5c27e",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-IAOGOSDT": {
-      "file": "chunk-IAOGOSDT.js"
+    "chunk-SJJO32B2": {
+      "file": "chunk-SJJO32B2.js"
     },
-    "chunk-7H2CYKOA": {
-      "file": "chunk-7H2CYKOA.js"
+    "chunk-RB43LT5D": {
+      "file": "chunk-RB43LT5D.js"
     },
-    "chunk-MOKOMEF5": {
-      "file": "chunk-MOKOMEF5.js"
+    "chunk-HAYGR63U": {
+      "file": "chunk-HAYGR63U.js"
     },
     "chunk-H4JBMRPK": {
       "file": "chunk-H4JBMRPK.js"
