@@ -1,18 +1,47 @@
 <div class="row">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <span class="pull-left">
-        <h3>
-          <strong>Contacts</strong>
-        </h3>
-      </span>
-      <a class="btn btn-success pull-right" routerLink="new"> New Contact </a>
-      <div class="clearfix center-block"></div>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="row">
+                <span class="title pad-left-right">Contacts</span>
+              </div>
+              <div class="row">
+                <div class="input-group pull-left pad-left-right col-xs-7">
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="searchBox"
+                    id="searchBox"
+                    #searchBox
+                    (keyup)="search(searchBox.value)"
+                    placeholder="Enter a search value"
+                  />
+                  <div
+                    class="glyphicon glyphicon-search input-group-addon"
+                    (click)="search(searchBox.value)"
+                  ></div>
+                </div>
+                <div class="pull-right pad-left-right">
+                  <a class="btn btn-success" [routerLink]="['new']"
+                    >New Contact</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="panel-body">
       <div class="col-xs-12">
         <cms-contact-item
-          *ngFor="let contactEl of contacts; let i = index"
+          *ngFor="
+            let contactEl of contacts | contactsFilter : searchBox.value;
+            let i = index
+          "
           [contact]="contactEl"
           [index]="i"
         ></cms-contact-item>
