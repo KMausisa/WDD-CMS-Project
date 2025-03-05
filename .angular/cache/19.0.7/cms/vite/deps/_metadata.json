@@ -1,55 +1,64 @@
 {
-  "hash": "a3daa978",
-  "configHash": "925c11f6",
+  "hash": "def8bc49",
+  "configHash": "baebc634",
   "lockfileHash": "364b6a74",
-  "browserHash": "fb1ca6c1",
+  "browserHash": "fb4c8bbe",
   "optimized": {
     "@angular/cdk/drag-drop": {
       "src": "../../../../../../node_modules/@angular/cdk/fesm2022/drag-drop.mjs",
       "file": "@angular_cdk_drag-drop.js",
-      "fileHash": "9022f4ed",
+      "fileHash": "a4863f86",
       "needsInterop": false
     },
     "@angular/common": {
       "src": "../../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "237b5376",
+      "fileHash": "2b1f29ba",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "707e387e",
+      "fileHash": "2dd3e201",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "d86f00da",
+      "fileHash": "93c71629",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "37ab5f41",
+      "fileHash": "3abff3f9",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "2d495ca2",
+      "fileHash": "bfc0ea0e",
       "needsInterop": false
     },
     "rxjs": {
       "src": "../../../../../../node_modules/rxjs/_esm5/index.js",
       "file": "rxjs.js",
-      "fileHash": "13c5c27e",
+      "fileHash": "f1f6b3fb",
+      "needsInterop": false
+    },
+    "@angular/common/http": {
+      "src": "../../../../../../node_modules/@angular/common/fesm2022/http.mjs",
+      "file": "@angular_common_http.js",
+      "fileHash": "7a284d22",
       "needsInterop": false
     }
   },
   "chunks": {
-    "chunk-SJJO32B2": {
-      "file": "chunk-SJJO32B2.js"
+    "chunk-4VELLTIB": {
+      "file": "chunk-4VELLTIB.js"
+    },
+    "chunk-WRCFVEXO": {
+      "file": "chunk-WRCFVEXO.js"
     },
     "chunk-RB43LT5D": {
       "file": "chunk-RB43LT5D.js"

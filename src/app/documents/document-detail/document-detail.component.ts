@@ -34,8 +34,8 @@ export class DocumentDetailComponent implements OnInit {
   }
 
   onView() {
-    if (this.document.imageUrl) {
-      this.nativeWindow.open(this.document.imageUrl);
+    if (this.document.url) {
+      this.nativeWindow.open(this.document.url);
     }
   }
 
