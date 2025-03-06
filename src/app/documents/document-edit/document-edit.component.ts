@@ -50,6 +50,7 @@ export class DocumentEditComponent implements OnInit {
     );
     if (this.editMode == true) {
       this.documentService.updateDocument(this.originalDocument, newDocument);
+      this.onCancel();
     } else {
       this.documentService.addDocument(newDocument);
       this.onCancel();
