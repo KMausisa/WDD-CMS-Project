@@ -11,8 +11,9 @@
           <div class="col-xs-12">
             <!--Add tag to load the MessageItemComponent-->
             <cms-message-item
-              *ngFor="let messageEl of messages"
+              *ngFor="let messageEl of messages; let i = index"
               [message]="messageEl"
+              [index]="i"
             ></cms-message-item>
           </div>
         </div>

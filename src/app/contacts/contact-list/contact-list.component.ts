@@ -20,16 +20,21 @@ export class ContactListComponent implements OnInit {
   // Create an array of Contacts
   contacts: Contact[] = [];
   subscription: Subscription;
+  term: string;
 
   constructor(private contactService: ContactService) {}
 
   ngOnInit() {
-    this.contacts = this.contactService.getContacts();
+    this.contactService.fetchContacts();
     this.contactService.contactChangedEvent.subscribe((arr: Contact[]) => {
       this.contacts = arr;
     });
     this.subscription = this.contactService.contactListChangedEvent.subscribe(
       (contactList: Contact[]) => (this.contacts = contactList)
     );
+  }
+
+  search(value: string) {
+    this.term = value;
   }
 }

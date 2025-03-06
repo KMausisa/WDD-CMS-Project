@@ -1,4 +1,5 @@
 import { Injectable, Output, EventEmitter, OnInit } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 
 import { Document } from './document.model';
@@ -8,21 +9,62 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
   providedIn: 'root',
 })
 export class DocumentService implements OnInit {
-  documents: Document[];
+  documents: Document[] = [];
   maxDocumentId: number;
   @Output() documentSelectedEvent = new EventEmitter<Document>();
   @Output() documentChangedEvent = new EventEmitter<Document[]>();
   documentListChangedEvent = new Subject<Document[]>();
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
   }
 
   ngOnInit(): void {}
 
-  getDocuments(): Document[] {
-    return this.documents.slice();
+  getDocuments() {
+    return this.http.get<Document[]>(
+      'https://kjamcms-default-rtdb.firebaseio.com/documents.json'
+    );
+  }
+
+  fetchDocuments() {
+    // Subscribe to the Observable to handle the data
+    this.getDocuments().subscribe(
+      (documents: Document[]) => {
+        this.documents = documents;
+        this.maxDocumentId = this.getMaxId();
+        // Sort the list of documents
+        this.documents.sort((curr, next) => {
+          if (curr.id < next.id) {
+            return -1;
+          } else if (curr.id > next.id) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        this.documentListChangedEvent.next(this.documents.slice());
+      },
+      (error: any) => {
+        console.log(error);
+      }
+    );
+  }
+
+  storeDocuments() {
+    let originalDocuments = JSON.stringify(this.documents);
+    const headers = new HttpHeaders({ 'content-type': 'application/json' });
+
+    this.http
+      .put(
+        'https://kjamcms-default-rtdb.firebaseio.com/documents.json',
+        originalDocuments,
+        { headers }
+      )
+      .subscribe(() =>
+        this.documentListChangedEvent.next(this.documents.slice())
+      );
   }
 
   getDocumentId(id: string): Document | null {
@@ -48,7 +90,7 @@ export class DocumentService implements OnInit {
     newDocument.id = String(this.maxDocumentId);
     this.documents.push(newDocument);
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
@@ -62,7 +104,7 @@ export class DocumentService implements OnInit {
     newDocument.id = originalDocument.id;
     this.documents[pos] = newDocument;
     let documentsListClone = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone);
+    this.storeDocuments();
   }
 
   deleteDocument(document: Document) {
@@ -75,6 +117,6 @@ export class DocumentService implements OnInit {
     }
     this.documents.splice(pos, 1);
     let documentsListClone = this.documents.slice();
-    this.documentChangedEvent.next(documentsListClone);
+    this.storeDocuments();
   }
 }

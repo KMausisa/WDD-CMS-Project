@@ -21,6 +21,8 @@ import { ContactService } from './contacts/contact.service';
 import { AppRoutingModule } from './app-routing.module';
 import { DocumentEditComponent } from './documents/document-edit/document-edit.component';
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
+import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,7 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
     DropdownDirective,
     DocumentEditComponent,
     ContactEditComponent,
+    ContactsFilterPipe,
   ],
   imports: [
     BrowserModule,
@@ -47,6 +50,7 @@ import { ContactEditComponent } from './contacts/contact-edit/contact-edit.compo
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
+    HttpClientModule,
   ],
 
   providers: [ContactService],
