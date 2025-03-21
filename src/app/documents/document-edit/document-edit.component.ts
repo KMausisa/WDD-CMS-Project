@@ -44,7 +44,7 @@ export class DocumentEditComponent implements OnInit {
     let newDocument = new Document(
       value.id,
       value.name,
-      value.description,
+      value.description || '',
       value.imageUrl,
       value.children
     );

@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 
 import { Message } from '../message.model';
 import { Contact } from '../../contacts/contact.model';
 import { ContactService } from '../../contacts/contact.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cms-message-item',
@@ -17,11 +18,25 @@ export class MessageItemComponent implements OnInit {
   messageSender: string;
 
   constructor(private contactService: ContactService) {}
-
   ngOnInit() {
-    const contact: Contact = this.contactService.getContact(
-      this.message.sender
-    );
-    this.messageSender = contact.name;
+    this.contactService.contacts$.subscribe((contacts) => {
+      if (contacts.length > 0) {
+        const contact: Contact | null = this.contactService.getContact(
+          this.message.sender
+        );
+        if (contact) {
+          this.messageSender = contact.name;
+        } else {
+          console.error('Contact not found');
+        }
+      } else {
+        console.log('Contacts are still loading...');
+      }
+    });
+
+    // Ensure contacts are fetched if they haven't been fetched yet
+    if (this.contactService['contacts'].length === 0) {
+      this.contactService.fetchContacts();
+    }
   }
 }
