@@ -20,22 +20,20 @@ export class MessageService {
   }
 
   getMessages() {
-    return this.http.get<Message[]>(
-      'https://kjamcms-default-rtdb.firebaseio.com/messages.json'
-    );
+    return this.http.get<any>('http://localhost:3000/messages');
   }
 
   fetchMessages() {
     // Subscribe to the Observable to handle the data
     this.getMessages().subscribe(
-      (messages: Message[]) => {
-        this.messages = messages;
+      (response: { data: Message[]; message: string }) => {
+        this.messages = response?.data;
         this.maxMessageId = this.getMaxId();
         // Sort the list of contacts
         this.messages.sort((curr, next) => {
-          if (curr.id < next.id) {
+          if (curr.subject < next.subject) {
             return -1;
-          } else if (curr.id > next.id) {
+          } else if (curr.subject > next.subject) {
             return 1;
           } else {
             return 0;
@@ -54,11 +52,7 @@ export class MessageService {
     const headers = new HttpHeaders({ 'content-type': 'application/json' });
 
     this.http
-      .put(
-        'https://kjamcms-default-rtdb.firebaseio.com/messages.json',
-        originalMessages,
-        { headers }
-      )
+      .put('http://localhost:3000/messages', originalMessages, { headers })
       .subscribe(() =>
         this.messageListChangedEvent.next(this.messages.slice())
       );
@@ -74,6 +68,12 @@ export class MessageService {
   }
 
   getMaxId(): number {
+    if (!Array.isArray(this.messages)) {
+      this.messages = Array.isArray(this.messages)
+        ? this.messages
+        : [this.messages];
+    }
+
     let maxId = 0;
     this.messages.forEach((message) => {
       let currentId = +message.id;
@@ -85,7 +85,27 @@ export class MessageService {
   }
 
   addMessage(message: Message) {
-    this.messages.push(message);
-    this.storeMessages();
+    if (!message) {
+      return;
+    }
+
+    message.id = '';
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .post<{ message: Message }>('http://localhost:3000/messages', message, {
+        headers: headers,
+      })
+      .subscribe(
+        (responseData) => {
+          const savedMessage = responseData.message;
+          this.messages.push(savedMessage);
+          this.messageListChangedEvent.next(this.messages.slice());
+        },
+        (err) => {
+          console.log('Error adding Document: ', err);
+        }
+      );
   }
 }

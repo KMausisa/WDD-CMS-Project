@@ -13,7 +13,7 @@ import { MessageService } from '../message.service';
 })
 export class MessageListComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
-  subscription: Subscription;
+  messageSubscription: Subscription;
 
   constructor(private messageService: MessageService) {}
 
@@ -22,9 +22,10 @@ export class MessageListComponent implements OnInit, OnDestroy {
     this.messageService.messageChangedEvent.subscribe(
       (messages: Message[]) => (this.messages = messages)
     );
-    this.subscription = this.messageService.messageListChangedEvent.subscribe(
-      (messageList: Message[]) => (this.messages = messageList)
-    );
+    this.messageSubscription =
+      this.messageService.messageListChangedEvent.subscribe(
+        (messageList: Message[]) => (this.messages = messageList)
+      );
   }
 
   // Adds a new message to the array messages
@@ -33,6 +34,6 @@ export class MessageListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.messageSubscription.unsubscribe();
   }
 }

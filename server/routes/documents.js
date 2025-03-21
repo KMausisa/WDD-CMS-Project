@@ -5,27 +5,37 @@ const sequenceGenerator = require("./sequenceGenerator");
 const Document = require("../models/document");
 
 router.get("/", (req, res, next) => {
-  Document.find({}, (err, documents) => {
-    if (err) {
+  Document.find()
+    .then((documents) => {
+      return res
+        .status(200)
+        .json({ message: "Documents retrieved successfully", data: documents });
+    })
+    .catch((err) => {
       return res.status(500).json({
         message: "Error retrieving documents",
         error: err,
       });
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Documents retrieved successfully", data: documents });
-  });
+    });
 });
 
-router.post("/", (req, res, next) => {
-  const maxDocumentId = sequenceGenerator.nextId("documents");
+router.post("/", async (req, res, next) => {
+  // Validate required fields
+  if (!req.body.name || !req.body.url) {
+    return res.status(400).json({
+      message: "Name and URL are required fields.",
+    });
+  }
+  // Initialize the SequenceGenerator instance (fetches current sequence data)
+  await sequenceGenerator.init();
+
+  // Get the next document ID asynchronously
+  const maxDocumentId = await sequenceGenerator.nextId("documents");
 
   const document = new Document({
-    id: maxDocumentId,
+    id: maxDocumentId.toString(),
     name: req.body.name,
-    description: req.body.description,
+    description: req.body.description || "",
     url: req.body.url,
   });
 

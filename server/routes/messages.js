@@ -5,27 +5,31 @@ const sequenceGenerator = require("./sequenceGenerator");
 const Message = require("../models/message");
 
 router.get("/", (req, res, next) => {
-  Message.find({}, (err, messages) => {
-    if (err) {
+  Message.find({})
+    .then((messages) => {
+      return res
+        .status(200)
+        .json({ message: "Messages retrieved successfully", data: messages });
+    })
+    .catch((err) => {
       return res.status(500).json({
         message: "Error retrieving messages",
         error: err,
       });
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Messages retrieved successfully", data: messages });
-  });
+    });
 });
 
-router.post("/", (req, res, next) => {
-  const maxMessageId = sequenceGenerator.nextId("messages");
+router.post("/", async (req, res, next) => {
+  await sequenceGenerator.init();
+
+  // Get the next document ID asynchronously
+  const maxMessageId = await sequenceGenerator.nextId("messages");
 
   const message = new Message({
-    id: maxMessageId,
+    id: maxMessageId.toString(),
     subject: req.body.subject,
-    msgText: req.body.message,
+    msgText: req.body.msgText,
+    sender: req.body.sender,
   });
 
   message
@@ -48,7 +52,7 @@ router.put("/:id", (req, res, next) => {
   Message.findOne({ id: req.params.id })
     .then((message) => {
       message.subject = req.body.subject;
-      message.msgText = req.body.message;
+      message.msgText = req.body.msgText;
 
       Message.updateOne({ id: req.params.id }, message)
         .then((result) => {

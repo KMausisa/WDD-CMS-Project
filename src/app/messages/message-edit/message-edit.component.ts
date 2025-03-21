@@ -32,7 +32,7 @@ export class MessageEditComponent implements OnInit {
     const subject = this.subjectRef.nativeElement.value;
     // grab the value stored in the msgText input
     const msgText = this.msgTextRef.nativeElement.value;
-    const newMessage = new Message('99', subject, msgText, this.currentSender);
+    const newMessage = new Message('', subject, msgText, this.currentSender);
     this.messageService.addMessage(newMessage);
   }
 

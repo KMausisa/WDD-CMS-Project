@@ -7,25 +7,26 @@ const Contact = require("../models/contact");
 router.get("/", (req, res, next) => {
   Contact.find()
     .populate("group")
-    .then((err, contacts) => {
-      if (err) {
-        return res.status(500).json({
-          message: "Error retrieving contacts",
-          error: err,
-        });
-      }
-
+    .then((contacts) => {
       return res
         .status(200)
         .json({ message: "Contacts retrieved successfully", data: contacts });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        message: "Error retrieving contacts",
+        error: err,
+      });
     });
 });
 
-router.post("/", (req, res, next) => {
-  const maxContactId = sequenceGenerator.nextId("contacts");
+router.post("/", async (req, res, next) => {
+  await sequenceGenerator.init();
+
+  const maxContactId = await sequenceGenerator.nextId("contacts");
 
   const contact = new Contact({
-    id: maxContactId,
+    id: maxContactId.toString(),
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,

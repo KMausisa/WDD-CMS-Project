@@ -15,9 +15,8 @@ export class ContactEditComponent implements OnInit {
   @ViewChild('f', { static: false }) slForm: NgForm;
   originalContact: Contact;
   contact: Contact;
-  groupCOntacts: Contact[] = [];
+  groupContacts: Contact[] = [];
   editMode: boolean = false;
-  id: string;
 
   constructor(
     private contactService: ContactService,
@@ -40,7 +39,7 @@ export class ContactEditComponent implements OnInit {
       this.contact = JSON.parse(JSON.stringify(this.originalContact));
 
       if (this.contact.group) {
-        this.groupCOntacts = this.contact.group.slice();
+        this.groupContacts = this.contact.group.slice();
       }
     });
   }
@@ -57,6 +56,7 @@ export class ContactEditComponent implements OnInit {
     );
     if (this.editMode == true) {
       this.contactService.updateContact(this.originalContact, newContact);
+      this.onCancel();
     } else {
       this.contactService.addContact(newContact);
       this.onCancel();
